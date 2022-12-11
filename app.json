@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Gabi.Aplicativo.MusicasFilmes.Front",
-    "slug": "Gabi.Aplicativo.MusicasFilmes.Front",
+    "slug": "aplicativogabi",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,10 +24,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.rafaelosexpo.aplicativogabi"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "660fba4e-5b66-4bed-a9a4-b744a860248e"
+      }
     }
   }
 }
