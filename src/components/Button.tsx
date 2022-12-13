@@ -20,7 +20,7 @@ export function Button({ title, icon, ...rest }: ButtonProps ) {
                 <Entypo name="folder-music" size={36} color="black" />
             }
             {(icon === 3) &&
-                <FontAwesome5 name="hand-holding-usd" size={36} color="black" />
+                <Entypo name="stopwatch" size={36} color="black" />
             }
             <View>
                 <Text style={styles.buttonText}>

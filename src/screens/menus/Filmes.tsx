@@ -9,8 +9,6 @@ import fonts from '../../styles/fonts'
 export function Filmes (){
     const navigation = useNavigation()
 
-    
-
     function selectScreen(screen: string) {
         if(screen === 'ListaFilmes') {
             navigation.navigate('ListaFilmes' as never)

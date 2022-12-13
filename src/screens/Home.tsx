@@ -12,9 +12,11 @@ export function Home (){
 
     function selectScreen(screen: string) {
         if (screen === 'Filmes')
-            navigation.navigate('ListaFilmes' as never)
+            navigation.navigate('Filmes' as never)
         else if (screen === 'Musicas')
-            navigation.navigate('ListaMusicas' as never)
+            navigation.navigate('Musicas' as never)
+        else if (screen === 'Cronometro')
+            navigation.navigate('Cronometro' as never)
     }
 
     return(
@@ -27,6 +29,7 @@ export function Home (){
             <View style={styles.menuBar}>
                 <View style={styles.menu}>
                     <Button title='Filmes' icon={1} onPress={() => selectScreen('Filmes')}/>
+                    <Button title='Cronometro' icon={3} onPress={() => selectScreen('Cronometro')}/>
                 </View>
                 <View style={styles.menu}>
                     <Button title='Musicas' icon={2} onPress={() => selectScreen('Musicas')}/>

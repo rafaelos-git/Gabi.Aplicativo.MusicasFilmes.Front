@@ -5,6 +5,7 @@ import colors from '../styles/colors'
 import { Home } from '../screens/Home'
 import { Musicas } from '../screens/menus/Musicas'
 import { Filmes } from '../screens/menus/Filmes'
+import { Cronometro } from '../screens/menus/Cronometro'
 import { ListaFilmes } from '../screens/operations/ListaFilmes'
 import { ListaMusicas } from '../screens/operations/ListaMusicas'
 
@@ -30,6 +31,10 @@ const AppRoutes: React.FC = () => (
         <stackRoutes.Screen
             name="Filmes"
             component={Filmes}
+        />
+        <stackRoutes.Screen
+            name="Cronometro"
+            component={Cronometro}
         />
         <stackRoutes.Screen
             name="ListaFilmes"
