@@ -26,7 +26,7 @@ export function Musicas (){
                     <Button title='Lista de Musicas' icon={2} onPress={() => navigation.navigate('ListaMusicas' as never)}/>
                 </View>
                 <View style={styles.menu}>
-                    <Button title='Iniciar' icon={2} onPress={() => navigation.navigate('Cronometro' as never)}/>
+                    <Button title='Jogar' icon={6} onPress={() => navigation.navigate('IniciarMusica' as never)}/>
                 </View>
             </View>
         </SafeAreaView>

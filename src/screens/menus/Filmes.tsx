@@ -26,7 +26,7 @@ export function Filmes (){
                     <Button title='Lista de Filmes' icon={1} onPress={() => navigation.navigate('ListaFilmes' as never)}/>
                 </View>
                 <View style={styles.menu}>
-                    <Button title='Iniciar' icon={1} onPress={() => navigation.navigate('Cronometro' as never)}/>
+                    <Button title='Jogar' icon={6} onPress={() => navigation.navigate('IniciarFilme' as never)}/>
                 </View>
             </View>
         </SafeAreaView>

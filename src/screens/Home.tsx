@@ -14,16 +14,16 @@ export function Home (){
         <SafeAreaView style={styles.container}>
             <View style={styles.background}>
                 <View style={styles.titleBar}>
-                    <Text style={styles.title}>Início</Text>
+                    <Text style={styles.title}>Mimicando</Text>
                 </View>
             </View>
             <View style={styles.menuBar}>
                 <View style={styles.menu}>
-                    <Button title='Filmes' icon={1} onPress={() => navigation.navigate('Filmes' as never)}/>
+                    <Button title='Filmes' icon={4} onPress={() => navigation.navigate('Filmes' as never)}/>
                     <Button title='Cronometro' icon={3} onPress={() => navigation.navigate('Cronometro' as never)}/>
                 </View>
                 <View style={styles.menu}>
-                    <Button title='Musicas' icon={2} onPress={() => navigation.navigate('Musicas' as never)}/>
+                    <Button title='Musicas' icon={5} onPress={() => navigation.navigate('Musicas' as never)}/>
                 </View>
             </View>
         </SafeAreaView>

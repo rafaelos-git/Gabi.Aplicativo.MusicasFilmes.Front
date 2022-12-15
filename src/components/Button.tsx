@@ -1,6 +1,6 @@
 import React from 'react'
 import { TouchableOpacity, Text, StyleSheet, TouchableOpacityProps, View } from 'react-native'
-import { AntDesign, Ionicons, FontAwesome5, MaterialCommunityIcons, Entypo  } from '@expo/vector-icons'
+import { AntDesign, Ionicons, FontAwesome5, MaterialCommunityIcons, Entypo, MaterialIcons, FontAwesome } from '@expo/vector-icons'
 
 import colors from '../styles/colors'
 import fonts from '../styles/fonts'
@@ -17,10 +17,19 @@ export function Button({ title, icon, ...rest }: ButtonProps ) {
                 <Entypo name="folder-video" size={36} color="black" />
             }
             {(icon === 2) &&
-                <Entypo name="folder-music" size={36} color="black" />
+                <MaterialIcons name="my-library-music" size={36} color="black" />
             }
             {(icon === 3) &&
                 <Entypo name="stopwatch" size={36} color="black" />
+            }
+            {(icon === 4) &&
+                <MaterialIcons name="movie" size={36} color="black" />
+            }
+            {(icon === 5) &&
+                <FontAwesome name="music" size={36} color="black" />
+            }
+            {(icon === 6) &&
+                <Ionicons name="game-controller" size={36} color="black" />
             }
             <View>
                 <Text style={styles.buttonText}>
