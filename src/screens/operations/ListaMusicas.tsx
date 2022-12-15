@@ -110,7 +110,7 @@ export function ListaMusicas (){
             <View style={styles.background}>
                 <View style={styles.titleBar}>
                     <View style={styles.back}>
-                        <BackButton back='Home' color='branco'/>
+                        <BackButton back='Back' color='branco'/>
                     </View>
                     <View style={styles.titlePosition}>
                         <Text style={styles.title}>Lista de {'\n'} Musicas</Text>

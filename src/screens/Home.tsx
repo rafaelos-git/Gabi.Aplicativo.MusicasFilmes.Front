@@ -10,15 +10,6 @@ export function Home (){
     const navigation = useNavigation()
     const route = useRoute()
 
-    function selectScreen(screen: string) {
-        if (screen === 'Filmes')
-            navigation.navigate('Filmes' as never)
-        else if (screen === 'Musicas')
-            navigation.navigate('Musicas' as never)
-        else if (screen === 'Cronometro')
-            navigation.navigate('Cronometro' as never)
-    }
-
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.background}>
@@ -28,11 +19,11 @@ export function Home (){
             </View>
             <View style={styles.menuBar}>
                 <View style={styles.menu}>
-                    <Button title='Filmes' icon={1} onPress={() => selectScreen('Filmes')}/>
-                    <Button title='Cronometro' icon={3} onPress={() => selectScreen('Cronometro')}/>
+                    <Button title='Filmes' icon={1} onPress={() => navigation.navigate('Filmes' as never)}/>
+                    <Button title='Cronometro' icon={3} onPress={() => navigation.navigate('Cronometro' as never)}/>
                 </View>
                 <View style={styles.menu}>
-                    <Button title='Musicas' icon={2} onPress={() => selectScreen('Musicas')}/>
+                    <Button title='Musicas' icon={2} onPress={() => navigation.navigate('Musicas' as never)}/>
                 </View>
             </View>
         </SafeAreaView>

@@ -9,20 +9,12 @@ import fonts from '../../styles/fonts'
 export function Filmes (){
     const navigation = useNavigation()
 
-    function selectScreen(screen: string) {
-        if(screen === 'ListaFilmes') {
-            navigation.navigate('ListaFilmes' as never)
-        }
-        else if (screen === 'Back')
-            navigation.navigate('Home' as never)
-    }
-
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.background}>
                 <View style={styles.titleBar}>
                     <View style={styles.back}>
-                        <BackButton back='Home' color='branco'/>
+                        <BackButton back='Back' color='branco'/>
                     </View>
                     <View style={styles.titlePosition}>
                         <Text style={styles.title}>Filmes</Text>
@@ -31,11 +23,10 @@ export function Filmes (){
             </View>
             <View style={styles.menuBar}>
                 <View style={styles.menu}>
-                    <Button title='Adicionar Filme' icon={1} onPress={() => selectScreen('')}/>
+                    <Button title='Lista de Filmes' icon={1} onPress={() => navigation.navigate('ListaFilmes' as never)}/>
                 </View>
                 <View style={styles.menu}>
-                    {/* <Button title='Despesas' icon={3} onPress={() => selectScreen('Expenses')}/> */}
-                    <Button title='Lista de Filmes' icon={1} onPress={() => selectScreen('ListaFilmes')}/>
+                    <Button title='Iniciar' icon={1} onPress={() => navigation.navigate('Cronometro' as never)}/>
                 </View>
             </View>
         </SafeAreaView>
