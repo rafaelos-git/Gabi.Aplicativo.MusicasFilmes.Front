@@ -47,7 +47,11 @@ export function ListaFilmes (){
         try {
             const jsonValue = JSON.stringify(value)
             await AsyncStorage.setItem('filmes', jsonValue)
-            Alert.alert('Sucesso!', 'Música ' + {operation} + ' com sucesso!')
+            Alert.alert('Sucesso!', `Filme ${operation} com sucesso!`)
+
+            if (operation === 'editado') {
+                navigation.navigate('Filmes' as never)
+            }
         } catch (e) {
             if (operation === 'cadastrado')
                 Alert.alert('Erro!', 'Não foi possível cadastrar o filme!')

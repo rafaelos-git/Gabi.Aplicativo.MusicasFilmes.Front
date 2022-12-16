@@ -48,7 +48,11 @@ export function ListaMusicas (){
         try {
             const jsonValue = JSON.stringify(value)
             await AsyncStorage.setItem('musicas', jsonValue)
-            Alert.alert('Sucesso!', 'Música ' + {operation} + ' com sucesso!')
+            Alert.alert('Sucesso!', `Música ${operation} com sucesso!`)
+
+            if (operation === 'editada') {
+                navigation.navigate('Musicas' as never)
+            }
         } catch (e) {
             if (operation === 'cadastrada')
                 Alert.alert('Erro!', 'Não foi possível cadastrar a música!')
