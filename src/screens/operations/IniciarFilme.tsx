@@ -235,6 +235,7 @@ const styles = StyleSheet.create({
     },
     textFilme: {
         fontFamily: fonts.heading,
-        fontSize: 36
+        fontSize: 24,
+        textAlign: 'center'
     }
 })

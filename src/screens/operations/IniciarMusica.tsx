@@ -235,6 +235,7 @@ const styles = StyleSheet.create({
     },
     textMusica: {
         fontFamily: fonts.heading,
-        fontSize: 36
+        fontSize: 24,
+        textAlign: 'center'
     }
 })

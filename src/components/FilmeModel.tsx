@@ -1,41 +1,40 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacityProps, View } from 'react-native'
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, AntDesign } from '@expo/vector-icons'
 import colors from '../styles/colors'
 import fonts from '../styles/fonts'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 
-interface ReportBarAntecipationProps extends TouchableOpacityProps {
+interface FilmeModelProps extends TouchableOpacityProps {
     id: number,
     nome: string,
+    editItem: Function,
+    deleteItem: Function
 }
 
-export function FilmeModel({id, nome, ...rest}: ReportBarAntecipationProps) {
+export function FilmeModel({id, nome, editItem, deleteItem, ...rest}: FilmeModelProps) {
     const navigation = useNavigation()
     
     return (
         <View style={styles.bar}>
             <View style={styles.internBar}>
                 <View style={styles.infoBar}>
-                    {/* <View style={styles.dataBar}>
-                        <View style={styles.titleBar}>
-                            <View style={styles.backgroundPosition}>
-                                <Text style={styles.titleInfo}>
-                                    NOME DO FILME
-                                </Text>
-                            </View>
-                        </View>
-                    </View> */}
                     <View style={styles.dataBar}>
                         <View style={styles.titleBar}>
-                            <View style={styles.backgroundPosition}>
-                                <Text style={styles.info}>
-                                    {nome}
-                                </Text>
-                            </View>
+                            <Text style={styles.info}>
+                                {nome}
+                            </Text>
                         </View>
                     </View>
+                </View>
+                <View style={styles.editBar}>
+                    <TouchableOpacity style={{ marginRight: 10 }} onPress={() => editItem()}>
+                        <FontAwesome name="edit" size={24} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => deleteItem()}>
+                        <AntDesign name="delete" size={24} color="black" />
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -55,7 +54,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     infoBar: {
-        width: '100%',
+        width: '80%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     background: {
         backgroundColor: colors.blue_custom,
@@ -67,17 +68,21 @@ const styles = StyleSheet.create({
     dataBar: {
         height: 50,
         width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     editBar: {
-        height: 100,
+        flexDirection: 'row',
+        height: 50,
         width: '20%',
         alignItems: 'center',
         justifyContent: 'center',
     },
     titleBar: {
         flex: 1,
-        flexDirection: 'row',
-        alignItems: 'flex-end'
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     titlePosition: {
         flex: 0.4,
@@ -111,13 +116,11 @@ const styles = StyleSheet.create({
     },
     info: {
         color: '#000',
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: fonts.text,
         textAlign: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        width: '100%',
-        // marginBottom: 10,
-        // marginLeft: 5,
+        height: 45,
+        width: '90%',
+        marginLeft: 5,
     },
 })

@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
 import React, { SetStateAction, useEffect, useState } from 'react'
-import { Alert, Image, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Alert, Image, Modal, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import colors from '../../styles/colors'
@@ -14,7 +14,12 @@ export function ListaMusicas (){
 
     const [musicas, setMusicas] = useState<string[]>([])
     const [showFilterModal, setShowFilterModal] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [novaMusica, setNovaMusica] = useState<string>()
+    const [refreshing, setRefreshing] = React.useState(false)
+    const [deleteId, setDeleteId] = useState<any>()
+    const [editId, setEditId] = useState<number>()
+    const [operation, setOperation] = useState<string>()
 
     useEffect(() => {
         getMusicas()
@@ -39,13 +44,18 @@ export function ListaMusicas (){
         }
     }
 
-    const storeMusicas = async (value: any) => {
+    const storeMusicas = async (value: any, operation: string) => {
         try {
             const jsonValue = JSON.stringify(value)
             await AsyncStorage.setItem('musicas', jsonValue)
-            Alert.alert('Sucesso!', 'Música cadastrado com sucesso!')
+            Alert.alert('Sucesso!', 'Música ' + {operation} + ' com sucesso!')
         } catch (e) {
-            Alert.alert('Erro!', 'Não foi possível cadastrar a música!')
+            if (operation === 'cadastrada')
+                Alert.alert('Erro!', 'Não foi possível cadastrar a música!')
+            else if (operation === 'editada')
+                Alert.alert('Erro!', 'Não foi possível editar a música!')
+            else
+                Alert.alert('Erro!', 'Não foi possível excluir a música!')
         }
     }
 
@@ -53,17 +63,57 @@ export function ListaMusicas (){
         setShowFilterModal(!showFilterModal)
     }
 
-    const onConfirm = () => {
-        let value: string [] = musicas
-
-        value.push(novaMusica as string)
-        storeMusicas(value)
-
-        navigation.navigate('Home' as never)
+    const onCancelDelete = () => {
+        setShowDeleteModal(!showDeleteModal)
     }
 
-    const showFilter = () => {
-        setShowFilterModal(!showFilterModal)
+    const onConfirm = () => {
+        let value: string [] = musicas
+        let newValue: string [] = []
+        let id: number = editId as number
+
+        if (operation === 'Adicionar') {
+            value.push(novaMusica as string)
+            storeMusicas(value, 'cadastrada')
+            showFilter('Adicionar', '', null)
+            setNovaMusica('')
+        } else {
+            value.map((item, index) => {
+                if (index === id) {
+                    newValue.push(novaMusica as string)
+                } else {
+                    newValue.push(item)
+                }
+                storeMusicas(newValue, 'editada')
+                showFilter('Editar', '', null)
+                setNovaMusica('')
+            })
+        }
+    }
+
+    const onConfirmDelete = () => {
+        let value: string [] = musicas
+
+        value.splice(deleteId, 1)
+
+        storeMusicas(value, 'excluída')
+        showDelete(null)
+    }
+
+    const showFilter = (value: string, item: string, id: any) => {
+        setOperation(value)
+
+        if (value === 'Editar') {
+            setNovaMusica(item)
+            setEditId(id)
+        }
+
+        setShowFilterModal(!showFilterModal) 
+    }
+
+    const showDelete = (id: any) => {
+        setDeleteId(id as number)
+        setShowDeleteModal(!showDeleteModal)
     }
 
     return(
@@ -77,7 +127,7 @@ export function ListaMusicas (){
                 <View style={styles.filterModalContainer}>
                     <View style={styles.filterModalTitleBar}>
                         <Text style={styles.filterModalTitle}>
-                            Adicionar Musica
+                            {operation} Musica
                         </Text>
                     </View>
                     <View style={styles.filterModalDataBar}>
@@ -107,6 +157,42 @@ export function ListaMusicas (){
                     </View>
                 </TouchableWithoutFeedback>
             </Modal>
+            <Modal transparent={true} visible={showDeleteModal} animationType='slide' onRequestClose={onCancelDelete}>
+                <TouchableWithoutFeedback onPress={onCancelDelete}>
+                    <View style={styles.filterModalBackground}>
+
+                    </View>
+                </TouchableWithoutFeedback>
+                <View style={styles.filterModalContainer}>
+                    <View style={styles.filterModalTitleBar}>
+                        <Text style={styles.filterModalTitle}>
+                            Excluir Musica
+                        </Text>
+                    </View>
+                    <View style={styles.filterModalDataBar}>
+                        <Text style={styles.textDelete}>
+                            Deseja realmente excluir a música?
+                        </Text>
+                    </View>
+                    <View style={styles.filterModalButtonBar}>
+                        <TouchableOpacity style={styles.filterModalButton} onPress={onCancelDelete}>
+                            <Text style={styles.filterModalButtonText}>
+                                Cancelar
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.filterModalButton} onPress={onConfirmDelete}>
+                            <Text style={styles.filterModalButtonText}>
+                                Confirmar
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <TouchableWithoutFeedback onPress={onCancelDelete}>
+                    <View style={styles.filterModalBackground}>
+
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
             <View style={styles.background}>
                 <View style={styles.titleBar}>
                     <View style={styles.back}>
@@ -119,7 +205,7 @@ export function ListaMusicas (){
             </View>
             <View style={styles.filterBar}>
                 <TouchableOpacity style={{marginLeft: 40}}>
-                    <Text style={styles.removeFilter} onPress={showFilter}>
+                    <Text style={styles.removeFilter} onPress={() => showFilter('Adicionar', '', null)}>
                         Adicionar Musica
                     </Text>
                 </TouchableOpacity>
@@ -129,7 +215,7 @@ export function ListaMusicas (){
                     { 
                         musicas.map((item, index) => {
                             return(
-                                <FilmeModel id={index} nome={item as any}/>
+                                <FilmeModel id={index} nome={item as any} editItem={() => showFilter('Editar', item, index)} deleteItem={() => showDelete(index)}/>
                             )
                         })
 
@@ -325,4 +411,9 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         height: 50,
     },
+    textDelete: {
+        fontFamily: fonts.text,
+        fontSize: 20,
+        textAlign: 'center'
+    }
 })

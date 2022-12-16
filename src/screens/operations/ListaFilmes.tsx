@@ -14,7 +14,11 @@ export function ListaFilmes (){
 
     const [filmes, setFilmes] = useState<string[]>([])
     const [showFilterModal, setShowFilterModal] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [novoFilme, setNovoFilme] = useState<string>()
+    const [deleteId, setDeleteId] = useState<any>()
+    const [editId, setEditId] = useState<number>()
+    const [operation, setOperation] = useState<string>()
 
     useEffect(() => {
         getFilmes()
@@ -39,13 +43,18 @@ export function ListaFilmes (){
         }
     }
 
-    const storeFilmes = async (value: any) => {
+    const storeFilmes = async (value: any, operation: string) => {
         try {
             const jsonValue = JSON.stringify(value)
             await AsyncStorage.setItem('filmes', jsonValue)
-            Alert.alert('Sucesso!', 'Filme cadastrado com sucesso!')
+            Alert.alert('Sucesso!', 'Música ' + {operation} + ' com sucesso!')
         } catch (e) {
-            Alert.alert('Erro!', 'Não foi possível cadastrar o filme!')
+            if (operation === 'cadastrado')
+                Alert.alert('Erro!', 'Não foi possível cadastrar o filme!')
+            else if (operation === 'editado')
+                Alert.alert('Erro!', 'Não foi possível editar o filme!')
+            else
+                Alert.alert('Erro!', 'Não foi possível excluir o filme!')
         }
     }
 
@@ -53,17 +62,57 @@ export function ListaFilmes (){
         setShowFilterModal(!showFilterModal)
     }
 
-    const onConfirm = () => {
-        let value: string [] = filmes
-
-        value.push(novoFilme as string)
-        storeFilmes(value)
-
-        navigation.navigate('Home' as never)
+    const onCancelDelete = () => {
+        setShowDeleteModal(!showDeleteModal)
     }
 
-    const showFilter = () => {
-        setShowFilterModal(!showFilterModal)
+    const onConfirm = () => {
+        let value: string [] = filmes
+        let newValue: string [] = []
+        let id: number = editId as number
+
+        if (operation === 'Adicionar') {
+            value.push(novoFilme as string)
+            storeFilmes(value, 'cadastrado')
+            showFilter('Adicionar', '', null)
+            setNovoFilme('')
+        } else {
+            value.map((item, index) => {
+                if (index === id) {
+                    newValue.push(novoFilme as string)
+                } else {
+                    newValue.push(item)
+                }
+                storeFilmes(newValue, 'editado')
+                showFilter('Editar', '', null)
+                setNovoFilme('')
+            })
+        }
+    }
+
+    const onConfirmDelete = () => {
+        let value: string [] = filmes
+
+        value.splice(deleteId, 1)
+
+        storeFilmes(value, 'excluido')
+        showDelete(null)
+    }
+
+    const showFilter = (value: string, item: string, id: any) => {
+        setOperation(value)
+
+        if (value === 'Editar') {
+            setNovoFilme(item)
+            setEditId(id)
+        }
+
+        setShowFilterModal(!showFilterModal) 
+    }
+
+    const showDelete = (id: any) => {
+        setDeleteId(id as number)
+        setShowDeleteModal(!showDeleteModal)
     }
 
     return(
@@ -77,7 +126,7 @@ export function ListaFilmes (){
                 <View style={styles.filterModalContainer}>
                     <View style={styles.filterModalTitleBar}>
                         <Text style={styles.filterModalTitle}>
-                            Adicionar Filme
+                            {operation} Filme
                         </Text>
                     </View>
                     <View style={styles.filterModalDataBar}>
@@ -107,6 +156,42 @@ export function ListaFilmes (){
                     </View>
                 </TouchableWithoutFeedback>
             </Modal>
+            <Modal transparent={true} visible={showDeleteModal} animationType='slide' onRequestClose={onCancelDelete}>
+                <TouchableWithoutFeedback onPress={onCancelDelete}>
+                    <View style={styles.filterModalBackground}>
+
+                    </View>
+                </TouchableWithoutFeedback>
+                <View style={styles.filterModalContainer}>
+                    <View style={styles.filterModalTitleBar}>
+                        <Text style={styles.filterModalTitle}>
+                            Excluir Filme
+                        </Text>
+                    </View>
+                    <View style={styles.filterModalDataBar}>
+                        <Text style={styles.textDelete}>
+                            Deseja realmente excluir o filme?
+                        </Text>
+                    </View>
+                    <View style={styles.filterModalButtonBar}>
+                        <TouchableOpacity style={styles.filterModalButton} onPress={onCancelDelete}>
+                            <Text style={styles.filterModalButtonText}>
+                                Cancelar
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.filterModalButton} onPress={onConfirmDelete}>
+                            <Text style={styles.filterModalButtonText}>
+                                Confirmar
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <TouchableWithoutFeedback onPress={onCancelDelete}>
+                    <View style={styles.filterModalBackground}>
+
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
             <View style={styles.background}>
                 <View style={styles.titleBar}>
                     <View style={styles.back}>
@@ -119,7 +204,7 @@ export function ListaFilmes (){
             </View>
             <View style={styles.filterBar}>
                 <TouchableOpacity style={{marginLeft: 40}}>
-                    <Text style={styles.removeFilter} onPress={showFilter}>
+                    <Text style={styles.removeFilter} onPress={() => showFilter('Adicionar', '', null)}>
                         Adicionar Filme
                     </Text>
                 </TouchableOpacity>
@@ -129,7 +214,7 @@ export function ListaFilmes (){
                     { 
                         filmes.map((item, index) => {
                             return(
-                                <FilmeModel id={index} nome={item as any}/>
+                                <FilmeModel id={index} nome={item as any} editItem={() => showFilter('Editar', item, index)} deleteItem={() => showDelete(index)}/>
                             )
                         })
 
@@ -325,4 +410,9 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         height: 50,
     },
+    textDelete: {
+        fontFamily: fonts.text,
+        fontSize: 20,
+        textAlign: 'center'
+    }
 })
